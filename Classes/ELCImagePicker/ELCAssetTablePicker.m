@@ -93,8 +93,9 @@
                                   atScrollPosition:UITableViewScrollPositionBottom
                                           animated:NO];
         }
-        
-        [self.navigationItem setTitle:self.singleSelection ? @"Pick Photo" : @"Pick Photos"];
+
+        //[self.navigationItem setTitle:self.singleSelection ? @"Pick Photo" : @"Pick Photos"];
+	    [self.navigationItem setTitle:NSLocalizedString(@"Select Items", @"")];
     });
     
     [pool release];

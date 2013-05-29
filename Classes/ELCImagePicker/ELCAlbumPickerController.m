@@ -27,8 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-	[self.navigationItem setTitle:@"Loading..."];
+
+	[self.navigationItem setTitle:NSLocalizedString(@"Loading...", @"Loading...")];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self.parent action:@selector(cancelImagePicker)];
 	[self.navigationItem setRightBarButtonItem:cancelButton];
@@ -72,7 +72,7 @@
         // Group Enumerator Failure Block
         void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
             
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Error") message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", @"Ok") otherButtonTitles:nil];
             [alert show];
             [alert release];
             
@@ -91,7 +91,7 @@
 - (void)reloadTableView
 {
 	[self.tableView reloadData];
-	[self.navigationItem setTitle:@"Select an Album"];
+	[self.navigationItem setTitle:NSLocalizedString(@"Photos", @"")];
 }
 
 - (void)selectedAssets:(NSArray*)assets
