@@ -25,7 +25,7 @@
 
 - (void)selectedAssets:(NSArray *)assets
 {
-	NSMutableArray *returnArray = [[[NSMutableArray alloc] init] autorelease];
+	NSMutableArray *returnArray = [[NSMutableArray alloc] init];
 	
 	for(ALAsset *asset in assets) {
 
@@ -36,14 +36,13 @@
         CGImageRef imgRef = [assetRep fullScreenImage];
         UIImage *img = [UIImage imageWithCGImage:imgRef
                                            scale:[UIScreen mainScreen].scale
-                                     orientation:UIImageOrientationUp];
+                                     orientation:(UIImageOrientation)assetRep.orientation];
         [workingDictionary setObject:img forKey:@"UIImagePickerControllerOriginalImage"];
 		[workingDictionary setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:@"UIImagePickerControllerReferenceURL"];
 		
 		[returnArray addObject:workingDictionary];
 		
-		[workingDictionary release];	
-	}    
+	}
 	if(_myDelegate != nil && [_myDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
 		[_myDelegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:[NSArray arrayWithArray:returnArray]];
 	} else {
@@ -74,11 +73,5 @@
     [super viewDidUnload];
 }
 
-
-- (void)dealloc
-{
-    NSLog(@"deallocing ELCImagePickerController");
-    [super dealloc];
-}
 
 @end

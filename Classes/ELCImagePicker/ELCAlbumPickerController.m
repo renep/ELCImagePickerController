@@ -28,25 +28,20 @@
 {
     [super viewDidLoad];
 
-	[self.navigationItem setTitle:NSLocalizedString(@"Loading...", @"Loading...")];
+	[self.navigationItem setTitle:NSLocalizedStringFromTable(@"Loading...", @"ELCImagePicker", @"")];
 
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self.parent action:@selector(cancelImagePicker)];
 	[self.navigationItem setRightBarButtonItem:cancelButton];
-	[cancelButton release];
 
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
-    [tempArray release];
-    
+
     ALAssetsLibrary *assetLibrary = [[ALAssetsLibrary alloc] init];
     self.library = assetLibrary;
-    [assetLibrary release];
 
     // Load Albums into assetGroups
     dispatch_async(dispatch_get_main_queue(), ^
     {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        
         // Group enumerator Block
         void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
         {
@@ -71,11 +66,14 @@
         
         // Group Enumerator Failure Block
         void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Error") message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:NSLocalizedString(@"Ok", @"Ok") otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            
+
+	        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedStringFromTable(@"Error", @"ELCImagePicker", @"")
+	                                                        message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]]
+				                                                 delegate:nil
+								                                cancelButtonTitle:NSLocalizedStringFromTable(@"Ok", @"ELCImagePicker", @"")
+																	              otherButtonTitles:nil];
+	        [alert show];
+
             NSLog(@"A problem occured %@", [error description]);	                                 
         };	
                 
@@ -84,14 +82,13 @@
                                usingBlock:assetGroupEnumerator 
                              failureBlock:assetGroupEnumberatorFailure];
         
-        [pool release];
-    });    
+    });
 }
 
 - (void)reloadTableView
 {
 	[self.tableView reloadData];
-	[self.navigationItem setTitle:NSLocalizedString(@"Photos", @"")];
+	[self.navigationItem setTitle:NSLocalizedStringFromTable(@"Photos", @"ELCImagePicker", @"")];
 }
 
 - (void)selectedAssets:(NSArray*)assets
@@ -116,24 +113,26 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Get count
-    ALAssetsGroup *g = (ALAssetsGroup*)[self.assetGroups objectAtIndex:indexPath.row];
-    [g setAssetsFilter:[ALAssetsFilter allPhotos]];
-    NSInteger gCount = [g numberOfAssets];
-    
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[g valueForProperty:ALAssetsGroupPropertyName], gCount];
-    [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[self.assetGroups objectAtIndex:indexPath.row] posterImage]]];
+
+	static NSString *CellIdentifier = @"Cell";
+
+	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if (cell == nil) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+	}
+
+	ALAssetsGroup *assetsGroup = (ALAssetsGroup *) [self.assetGroups objectAtIndex:indexPath.row];
+	[assetsGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
+	NSInteger numberOfAssets = [assetsGroup numberOfAssets];
+
+	//cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)", [assetsGroup valueForProperty:ALAssetsGroupPropertyName], numberOfAssets];
+	cell.textLabel.text = [assetsGroup valueForProperty:ALAssetsGroupPropertyName];
+	cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+	cell.detailTextLabel.text =  [NSString stringWithFormat:@"%d", numberOfAssets];
+	[cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup *) [self.assetGroups objectAtIndex:indexPath.row] posterImage]]];
 	[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-	
-    return cell;
+
+	return cell;
 }
 
 #pragma mark -
@@ -147,37 +146,16 @@
     picker.assetGroup = [self.assetGroups objectAtIndex:indexPath.row];
     [picker.assetGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
     
+	picker.assetPickerFilterDelegate = self.assetPickerFilterDelegate;
+	
 	[self.navigationController pushViewController:picker animated:YES];
-	[picker release];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	return 57;
+	return 80;
 }
 
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
-}
-
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
-}
-
-
-- (void)dealloc 
-{	
-    [_assetGroups release];
-    [_library release];
-    [super dealloc];
-}
 
 @end
 
