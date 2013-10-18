@@ -45,7 +45,7 @@ static CGFloat ELCAssetCellImageBorder = 8.0f;
 	[self.assetImageViews enumerateObjectsUsingBlock:^(ELCAssetImageView *imageView, NSUInteger index, BOOL *stop) {
 		if (CGRectContainsPoint(imageView.frame, point)) {
 				imageView.selected = !imageView.selected;
-					stop = YES;
+					*stop = YES;
 				}
 	}];
 
