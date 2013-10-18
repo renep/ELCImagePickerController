@@ -18,9 +18,6 @@
 
 @implementation ELCAlbumPickerController
 
-@synthesize parent = _parent;
-@synthesize assetGroups = _assetGroups;
-@synthesize library = _library;
 
 #pragma mark -
 #pragma mark View lifecycle

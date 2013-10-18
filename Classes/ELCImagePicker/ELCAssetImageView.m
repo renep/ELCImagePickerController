@@ -2,7 +2,6 @@
 // ELCImagePickerDemo 
 //
 // Created by rene on 17.10.13.
-// Copyright 2013 Drobnik.com. All rights reserved.
 //
 // 
 //
@@ -37,7 +36,6 @@
 		[self addSubview:self.highLightView];
 
 		self.checkImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ELCAssertCheckedImage.png"]];
-		//self.checkImage.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
 		[self.highLightView addSubview:self.checkImage];
 
 	}
@@ -52,7 +50,6 @@
 	self.imageView.frame = frame;
 	self.highLightView.frame = frame;
 
-
 	CGSize imageSize = self.checkImage.image.size;
 	CGSize highlightSize = self.highLightView.frame.size;
 	self.checkImage.frame = CGRectMake(highlightSize.width-imageSize.width, highlightSize.height - imageSize.height, imageSize.width, imageSize.height );
@@ -66,11 +63,6 @@
 
 - (BOOL)selected {
 	return !self.highLightView.hidden;
-}
-
-- (void)dealloc {
-	[_checkImage release];
-	[super dealloc];
 }
 
 

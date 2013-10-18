@@ -23,55 +23,40 @@
 	}
 }
 
-- (void)selectedAssets:(NSArray *)assets
-{
+- (void)selectedAssets:(NSArray *)assets {
 	NSMutableArray *returnArray = [[NSMutableArray alloc] init];
-	
-	for(ALAsset *asset in assets) {
+
+	for (ALAsset *asset in assets) {
 
 		NSMutableDictionary *workingDictionary = [[NSMutableDictionary alloc] init];
 		[workingDictionary setObject:[asset valueForProperty:ALAssetPropertyType] forKey:@"UIImagePickerControllerMediaType"];
-        ALAssetRepresentation *assetRep = [asset defaultRepresentation];
-        
-        CGImageRef imgRef = [assetRep fullScreenImage];
-        UIImage *img = [UIImage imageWithCGImage:imgRef
-                                           scale:[UIScreen mainScreen].scale
-                                     orientation:(UIImageOrientation)assetRep.orientation];
-        [workingDictionary setObject:img forKey:@"UIImagePickerControllerOriginalImage"];
+		ALAssetRepresentation *assetRep = [asset defaultRepresentation];
+
+		CGImageRef imgRef = [assetRep fullScreenImage];
+		UIImage *img = [UIImage imageWithCGImage:imgRef
+		                                   scale:[UIScreen mainScreen].scale
+				                         orientation:(UIImageOrientation) assetRep.orientation];
+		[workingDictionary setObject:img forKey:@"UIImagePickerControllerOriginalImage"];
 		[workingDictionary setObject:[[asset valueForProperty:ALAssetPropertyURLs] valueForKey:[[[asset valueForProperty:ALAssetPropertyURLs] allKeys] objectAtIndex:0]] forKey:@"UIImagePickerControllerReferenceURL"];
-		
+
 		[returnArray addObject:workingDictionary];
-		
+
 	}
-	if(_myDelegate != nil && [_myDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
+	if (_myDelegate != nil && [_myDelegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
 		[_myDelegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:[NSArray arrayWithArray:returnArray]];
-	} else {
-        [self popToRootViewControllerAnimated:NO];
-    }
+	}
+	else {
+		[self popToRootViewControllerAnimated:NO];
+	}
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return YES;
-    } else {
-        return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
-    }
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+		return YES;
+	}
+	else {
+		return toInterfaceOrientation != UIInterfaceOrientationPortraitUpsideDown;
+	}
 }
-
-#pragma mark -
-#pragma mark Memory management
-
-- (void)didReceiveMemoryWarning
-{
-    NSLog(@"ELC Image Picker received memory warning.");
-    
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewDidUnload {
-    [super viewDidUnload];
-}
-
 
 @end

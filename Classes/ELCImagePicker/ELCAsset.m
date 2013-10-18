@@ -14,30 +14,27 @@
 @synthesize parent = _parent;
 @synthesize selected = _selected;
 
-- (id)initWithAsset:(ALAsset*)asset
-{
+- (id)initWithAsset:(ALAsset *)asset {
 	self = [super init];
 	if (self) {
 		self.asset = asset;
-        _selected = NO;
-    }
-    
-	return self;	
+		_selected = NO;
+	}
+
+	return self;
 }
 
-- (void)toggleSelection
-{
-    self.selected = !self.selected;
+- (void)toggleSelection {
+	self.selected = !self.selected;
 }
 
-- (void)setSelected:(BOOL)selected
-{
-    _selected = selected;
-    if (selected) {
-        if (_parent != nil && [_parent respondsToSelector:@selector(assetSelected:)]) {
-            [_parent assetSelected:self];
-        }
-    }
+- (void)setSelected:(BOOL)selected {
+	_selected = selected;
+	if (selected) {
+		if (_parent != nil && [_parent respondsToSelector:@selector(assetSelected:)]) {
+			[_parent assetSelected:self];
+		}
+	}
 }
 
 
