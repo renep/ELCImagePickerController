@@ -10,6 +10,8 @@
 #import "ELCAsset.h"
 #import "ELCAlbumPickerController.h"
 
+static CGFloat ELCAssetTablePickerRowHeight = 160;
+
 @interface ELCAssetTablePicker ()
 
 @property (nonatomic, assign) int columns;
@@ -51,7 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.columns = self.view.bounds.size.width / 80;
+    self.columns = self.view.bounds.size.width / ELCAssetTablePickerRowHeight;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
@@ -62,7 +64,7 @@
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
 {
     [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
-    self.columns = self.view.bounds.size.width / 80;
+    self.columns = self.view.bounds.size.width / ELCAssetTablePickerRowHeight;
     [self.tableView reloadData];
 }
 
@@ -182,7 +184,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-	return 79;
+	return ELCAssetTablePickerRowHeight;
 }
 
 - (int)totalSelectedAssets {
